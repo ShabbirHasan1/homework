@@ -6,8 +6,7 @@ use std::io::IsTerminal as _;
 
 use rama::{
     error::{BoxError, ErrorContext as _},
-    http::client::EasyHttpWebClient,
-    net::{client::pool::http::HttpPooledConnectorConfig, tls::client::TlsClientConfig},
+    http::client::{EasyHttpWebClient, HttpPooledConnectorConfig},
     rt::Executor,
     telemetry::{
         opentelemetry::{
@@ -27,6 +26,7 @@ use rama::{
             },
         },
     },
+    tls::client::TlsClientConfig,
 };
 
 pub fn init_tracing() {
@@ -60,6 +60,7 @@ fn init_default(default_directive: impl Into<Directive>) {
 fn init_structured(default_directive: impl Into<Directive>) -> Result<(), BoxError> {
     let svc = EasyHttpWebClient::connector_builder()
         .with_default_transport_connector()
+        .with_default_dns_connector()
         .without_tls_proxy_support()
         .without_proxy_support()
         .with_tls_support_using_boringssl(TlsClientConfig::default())

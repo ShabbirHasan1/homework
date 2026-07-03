@@ -12,19 +12,17 @@ use rama::{
     graceful::{self, ShutdownGuard},
     http::{BodyLimitLayer, server::HttpServer, tls::CertIssuerHttpClient},
     layer::AddInputExtensionLayer,
-    net::{
-        Protocol,
-        address::SocketAddress,
-        tls::{
-            ApplicationProtocol,
-            server::{CacheKind, ServerAuth, ServerCertIssuerData, ServerConfig},
-        },
-    },
+    net::{Protocol, address::SocketAddress},
     proxy::haproxy::server::HaProxyLayer,
     rt::Executor,
     tcp::server::TcpListener,
     telemetry::tracing,
-    tls::boring::server::{TlsAcceptorData, TlsAcceptorLayer},
+    tls::{
+        boring::server::{
+            BoringServerConfigExt as _, CacheKind, ServerCertIssuerData, TlsAcceptorLayer,
+        },
+        server::TlsServerConfig,
+    },
 };
 
 // All routes are GET-only and the handlers ignore the body. 64 KiB is more
@@ -127,19 +125,12 @@ async fn spawn_service_https(
         tracing::warn!("certificate prefetch timed out after 10s; continuing without warm cache");
     }
 
-    let tls_server_config = ServerConfig {
-        application_layer_protocol_negotiation: Some(vec![
-            ApplicationProtocol::HTTP_2,
-            ApplicationProtocol::HTTP_11,
-        ]),
-        ..ServerConfig::new(ServerAuth::CertIssuer(ServerCertIssuerData {
+    let tls_server_config = TlsServerConfig::new()
+        .with_cert_issuer(ServerCertIssuerData {
             kind: issuer.into(),
             cache_kind: CacheKind::default(),
-        }))
-    };
-
-    let acceptor_data =
-        TlsAcceptorData::try_from(tls_server_config).context("create acceptor data")?;
+        })
+        .with_alpn_http_auto();
 
     let svc = AddInputExtensionLayer::new(Protocol::HTTPS)
         .into_layer(self::service::load_https_app_service().await?);
@@ -148,7 +139,7 @@ async fn spawn_service_https(
     let tcp_server = (
         BodyLimitLayer::request_only(REQUEST_BODY_LIMIT),
         HaProxyLayer::new().with_peek(true),
-        TlsAcceptorLayer::new(acceptor_data),
+        TlsAcceptorLayer::new(tls_server_config),
     )
         .into_layer(http_server);
 

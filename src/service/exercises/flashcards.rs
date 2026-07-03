@@ -39,7 +39,7 @@ pub async fn handler(req: Request) -> impl IntoResponse {
     let is_import = req
         .uri()
         .query()
-        .is_some_and(|q| q.pairs().any(|p| p.name_raw() == "import"));
+        .is_some_and(|q| q.pairs().any(|p| p.name_encoded() == "import"));
 
     let (title, description) = if is_import {
         (
