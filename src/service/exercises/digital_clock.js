@@ -208,7 +208,7 @@ runExercise({
     },
     validateConfig(cfg) {
         if (!cfg.numExercises || cfg.numExercises < 1) return "Geef een geldig aantal oefeningen op.";
-        if (cfg.directions.length === 0) return "Kies minstens één oefen-richting.";
+        if (cfg.directions.length === 0) return "Kies minstens één richting.";
         return null;
     },
     buildDeck,

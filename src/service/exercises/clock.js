@@ -633,8 +633,8 @@ runExercise({
         return readFields(form, FIELDS);
     },
     validateConfig(cfg) {
-        if (!cfg.numExercises || cfg.numExercises < 1) return "Gelieve een geldig aantal oefeningen op te geven.";
-        if (cfg.kinds.length === 0) return "Kies minstens één oefen-type.";
+        if (!cfg.numExercises || cfg.numExercises < 1) return "Geef een geldig aantal oefeningen op.";
+        if (cfg.kinds.length === 0) return "Kies minstens één soort oefening.";
         return null;
     },
     buildDeck,

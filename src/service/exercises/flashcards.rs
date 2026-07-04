@@ -43,8 +43,8 @@ pub async fn handler(req: Request) -> impl IntoResponse {
 
     let (title, description) = if is_import {
         (
-            "Importeer flitskaartjes deck — Oefeningen Basisschool",
-            "Klik om een gedeeld flitskaartjes deck te importeren in jouw oefeningen app.",
+            "Importeer deck met flitskaartjes — Oefeningen Basisschool",
+            "Klik om een gedeeld deck met flitskaartjes in de app te importeren.",
         )
     } else {
         (

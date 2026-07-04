@@ -81,8 +81,8 @@ runExercise({
         };
     },
     validateConfig(cfg) {
-        if (cfg.tables.length === 0) return "Gelieve minstens één maaltafel te selecteren.";
-        if (!cfg.numExercises || cfg.numExercises < 1) return "Gelieve een geldig aantal oefeningen op te geven.";
+        if (cfg.tables.length === 0) return "Kies minstens één maaltafel.";
+        if (!cfg.numExercises || cfg.numExercises < 1) return "Geef een geldig aantal oefeningen op.";
         return null;
     },
     buildDeck,

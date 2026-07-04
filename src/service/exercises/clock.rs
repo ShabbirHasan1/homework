@@ -30,7 +30,7 @@ pub async fn handler(req: Request) -> impl IntoResponse {
         freeplay_section(),
         exercise_scaffold(
             INFO,
-            "Leer de analoge klok lezen en zetten. Kies de oefen-type en de moeilijkheidsgraad.",
+            "Leer de analoge klok lezen en zetten. Kies het soort oefening en de moeilijkheidsgraad.",
             config_fields(),
             freeplay_entry(),
         ),

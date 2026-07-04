@@ -2401,7 +2401,7 @@ export function runExercise(spec) {
             const sessions = await listSessions(spec.id, 1);
             if (sessions.length === 0) {
                 setError(
-                    "Nog niets om te herhalen 💪 maak eerst een oefening, daarna kan je hier de moeilijke vragen terugzien.",
+                    "Nog niets om te herhalen 💪 Maak eerst een oefening. Daarna zie je hier de moeilijke vragen terug.",
                 );
             } else {
                 setError("Goed bezig 🎉 alle recente oefeningen zijn juist gemaakt — geen fouten om te herhalen.");
